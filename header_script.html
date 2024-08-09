@@ -1,0 +1,66 @@
+
+    <script>
+        function customIndexOf(str, pattern) {
+            const index = str.indexOf(pattern);
+            return index === -1 ? 0 : index;
+        }
+
+        function set_trip() {
+            const params = new URLSearchParams(window.location.search)
+            if (params.get('to') == null) {
+                document.getElementById('trip').innerHTML = params.get('from') + '->';
+            }
+            else if (params.get('from') == null) {
+                document.getElementById('trip').innerHTML = '->' + params.get('to');
+            }
+            else {
+            document.getElementById('trip').innerHTML = params.get('from') + '->' + params.get('to');
+            }
+        }
+
+        function set_orgin(name, rhp) {
+            base_url = document.URL	
+            base_url = base_url.slice(0, customIndexOf(base_url, '?'))
+            const params = new URLSearchParams(window.location.search)
+            params.set('from', name)
+            params.set('fromExternalId', 'RESROBOT:' + rhp)
+            window.history.pushState(0, 0, base_url + '?' + params.toString())
+            set_trip()
+        }
+
+        function set_destination(name, rhp) {
+            base_url = document.URL	
+            base_url = base_url.slice(0, customIndexOf(base_url, '?'))
+            const params = new URLSearchParams(window.location.search)
+            params.set('to', name)
+            params.set('toExternalId', 'RESROBOT:' + rhp)
+            window.history.pushState(0, 0, base_url + '?' + params.toString())
+            set_trip()
+        }
+
+        function redirect_vy() {
+            params = new URLSearchParams(window.location.search);
+            if (params.get('fromExternalId') != null && params.get('toExternalId') != null) {
+                window.open('https://www.vy.se/se-reseforslag?' + params.toString() + '&fromPosition=0,0&toPosition=59,17', '_blank')
+            }
+            else {
+                alert("Kan inte s\u00F6ka resa, destination eller startpunkt saknas");
+            }
+        }
+
+        function redirect_resrobot() {
+            params = new URLSearchParams(window.location.search);
+            if (params.get('fromExternalId') != null && params.get('toExternalId') != null) {
+                params.set('arrivalCountryCode', params.get('toExternalId').slice(9,11))
+                params.set('departureCountryCode', params.get('fromExternalId').slice(9,11))
+                params.set('arrivalLocationId', Number(params.get('toExternalId').slice(11)))
+                params.set('departureLocationId', Number(params.get('fromExternalId').slice(11)))
+                window.open('https://kopbiljett.resrobot.trainplanet.com/travel-wizard?' + params.toString(), '_blank')
+            }
+            else {
+                alert("Kan inte s\u00F6ka resa, destination eller startpunkt saknas");
+            }
+        }
+
+        set_trip()
+    </script>
