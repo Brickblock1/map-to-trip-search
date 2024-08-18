@@ -1,0 +1,14 @@
+Stop:
+     cnst id num  quay ish
+SWE: 9021050000001000
+RHP:     740000001          NSR will need to be extended to the full length for mapping
+NSR:             1
+FIX: 9021050000001000_2
+UL : 9021003191709000
+SJ : 9021074000001000
+
+quay:
+SWE: 9022050000001002 1 (2)
+RHP: Na                     Private and public codes must be checked so they align
+NSR: 5104 1 (2)
+SJ : 9022074000001001 *

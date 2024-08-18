@@ -1,8 +1,13 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>      
+
+    <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.4.1/dist/MarkerCluster.css"></script>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.4.1/dist/MarkerCluster.Default.css"></script>
+    <script src="https://unpkg.com/leaflet.markercluster@1.4.1/dist/leaflet.markercluster.js"></script>
+
     <style>
         * { 
             -moz-box-sizing: border-box; 
@@ -25,7 +30,7 @@
             cursor: pointer;
             border-radius: 10px;
             background-color: orange;
-            height: 8vh;
+            height: 10vh;
             min-height: 50px;
             min-width: 8vh;
             margin: 1vh;
@@ -37,25 +42,16 @@
             background-color: green;
         }
         #trip {
-            border-radius: 10px;
-            background-color: orange;
-            height: 8vh;
-            min-height: 50px;
-            min-width: 8vh;
-            margin: 1vh;
-            border: 0;
-            padding: 0.25em;
-            font-size: 4em;
         }
         h1 {
             border-radius: 0 0 10px 0;
             background-color: orange;
-            height: 10vh;
+            height: 12vh;
             min-height: 50px;
             margin: 0;
             border: 0;
-            padding: 0.25em;
-            font-size: 4em;
+            padding: 0.5em;
+            font-size: 4vh;
 
         }
         #map {
@@ -69,5 +65,10 @@
             margin: 0 0 0 0.25em;
             padding: 0.25em 0 0 0;
         }
-        
+        @media (max-width: 425px) {
+            h1 {
+                height: 24vh;
+            }
+        }        
     </style>
+    <title>Map to trip search</title>

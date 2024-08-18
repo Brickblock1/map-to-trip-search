@@ -7,14 +7,17 @@
 
         function set_trip() {
             const params = new URLSearchParams(window.location.search)
-            if (params.get('to') == null) {
-                document.getElementById('trip').innerHTML = params.get('from') + '->';
-            }
-            else if (params.get('from') == null) {
-                document.getElementById('trip').innerHTML = '->' + params.get('to');
-            }
-            else {
-            document.getElementById('trip').innerHTML = params.get('from') + '->' + params.get('to');
+            if (params.size != 0) {
+                if (params.get('to') == null) {
+                    document.getElementById('trip').innerText = params.get('from') + ' -> ';
+                }
+                else if (params.get('from') == null) {
+                    console.log(document.getElementById('trip'))
+                    document.getElementById('trip').innerText = ' -> ' + params.get('to');
+                }
+                else {
+                document.getElementById('trip').innerText = params.get('from') + ' -> ' + params.get('to');
+                }
             }
         }
 
@@ -61,6 +64,4 @@
                 alert("Kan inte s\u00F6ka resa, destination eller startpunkt saknas");
             }
         }
-
-        set_trip()
     </script>
