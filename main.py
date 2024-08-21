@@ -295,11 +295,11 @@ htmlend = """
 
 #<script src="sj.js"></script>
 
-folder = "Sweden"
-#used_quays = get_lines(folder)
+folder = "sweden"
+used_quays = get_lines(folder)
 
-#with open("quays.txt", "w", encoding="utf-8") as f:
-#    f.write(str(used_quays))
+with open("quays.txt", "w", encoding="utf-8") as f:
+    f.write(str(used_quays))
 
 with open("quays.txt", "r", encoding="UTF8") as file:
     used_quays = file.read()
@@ -309,7 +309,7 @@ used_quays = used_quays.replace("'", "")
 used_quays = used_quays.split(", ")
 used_quays = set(used_quays)
 
-write_stops_data(folder, used_quays, extra_file="NeTex_data/Stops/extra_stops.xml")
+write_stops_data(folder, used_quays, extra_file="NeTex_data/stops/_stops.xml")
 print("stops have been added")
 
 full_html = header +  header_script + headtobody + body + bodytoscript + map_script + htmlend
