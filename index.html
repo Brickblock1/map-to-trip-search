@@ -1,76 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
-    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>      
-
-    <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.4.1/dist/MarkerCluster.css"></script>
-    <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.4.1/dist/MarkerCluster.Default.css"></script>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin="" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
     <script src="https://unpkg.com/leaflet.markercluster@1.4.1/dist/leaflet.markercluster.js"></script>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <style>
-        * { 
-            -moz-box-sizing: border-box; 
-            -webkit-box-sizing: border-box; 
-            box-sizing: border-box; 
-        }
-        html {
-            height: 100vh;
-            width: 100%;
-        }
-        body {
-            width: 100%;
-            height: 100vh;
-            margin: 0;
-        }
-        .flex-container {
-            display: flex;
-        }
-        .navbar {
-            cursor: pointer;
-            border-radius: 10px;
-            background-color: orange;
-            height: 10vh;
-            min-height: 50px;
-            min-width: 8vh;
-            margin: 1vh;
-            border: 0;
-            padding: 0.5em;
-            font-size: 4vh;
-        }
-        .navbar:hover {
-            background-color: green;
-        }
-        #trip {
-        }
-        h1 {
-            border-radius: 0 0 10px 0;
-            background-color: orange;
-            height: 12vh;
-            min-height: 50px;
-            margin: 0;
-            border: 0;
-            padding: 0.5em;
-            font-size: 4vh;
-
-        }
-        #map {
-            width: 100%;
-            height: 100%;
-            left: 0.0vh;
-            top: 0.0vh;
-        }
-        img {
-            height: 1em;
-            margin: 0 0 0 0.25em;
-            padding: 0.25em 0 0 0;
-        }
-        @media (max-width: 425px) {
-            h1 {
-                height: 24vh;
-            }
-        }        
-    </style>
+    <link rel="stylesheet" href="style.css">
+    <meta name="viewport" content="width=device-width">
     <title>Map to trip search</title>
     <script>
         function customIndexOf(str, pattern) {
@@ -89,76 +25,142 @@
                     document.getElementById('trip').innerText = ' -> ' + params.get('to');
                 }
                 else {
-                document.getElementById('trip').innerText = params.get('from') + ' -> ' + params.get('to');
+                    document.getElementById('trip').innerText = params.get('from') + ' -> ' + params.get('to');
                 }
             }
         }
 
         function set_orgin(name, rhp) {
-            base_url = document.URL	
+            base_url = document.URL
             base_url = base_url.slice(0, customIndexOf(base_url, '?'))
             const params = new URLSearchParams(window.location.search)
             params.set('from', name)
-            params.set('fromExternalId', 'RESROBOT:' + rhp)
+            params.set('fromRHP', rhp)
             window.history.pushState(0, 0, base_url + '?' + params.toString())
             set_trip()
         }
 
         function set_destination(name, rhp) {
-            base_url = document.URL	
+            base_url = document.URL
             base_url = base_url.slice(0, customIndexOf(base_url, '?'))
             const params = new URLSearchParams(window.location.search)
             params.set('to', name)
-            params.set('toExternalId', 'RESROBOT:' + rhp)
+            params.set('toRHP', rhp)
             window.history.pushState(0, 0, base_url + '?' + params.toString())
             set_trip()
         }
 
         function redirect_vy() {
             params = new URLSearchParams(window.location.search);
-            if (params.get('fromExternalId') != null && params.get('toExternalId') != null) {
-                window.open('https://www.vy.se/se-reseforslag?' + params.toString() + '&fromPosition=0,0&toPosition=59,17', '_blank')
-            }
-            else {
+            if (params.get('fromRHP') != null && params.get('toRHP') != null) {
+                window.open(`https://www.vy.se/se-reseforslag?&fromPosition=0,0&toPosition=0,0`, '_blank')
+            } else {
                 alert("Kan inte s\u00F6ka resa, destination eller startpunkt saknas");
             }
         }
 
         function redirect_resrobot() {
             params = new URLSearchParams(window.location.search);
-            if (params.get('fromExternalId') != null && params.get('toExternalId') != null) {
-                params.set('arrivalCountryCode', params.get('toExternalId').slice(9,11))
-                params.set('departureCountryCode', params.get('fromExternalId').slice(9,11))
-                params.set('arrivalLocationId', Number(params.get('toExternalId').slice(11)))
-                params.set('departureLocationId', Number(params.get('fromExternalId').slice(11)))
-                window.open('https://kopbiljett.resrobot.trainplanet.com/travel-wizard?' + params.toString(), '_blank')
-            }
-            else {
+            if (params.get('fromRHP') != null && params.get('toRHP') != null) {
+                window.open(`https://kopbiljett.resrobot.trainplanet.com/travel-wizard?arrivalCountryCode=${params.get('toRHP').slice(9, 11)}&arrivalLocationId=${params.get('toRHP').slice(11)}&departureCountryCode=${params.get('fromRHP').slice(9, 11)}&departureLocationId=${params.get('fromRHP').slice(11)}`, '_blank')
+            } else {
                 alert("Kan inte s\u00F6ka resa, destination eller startpunkt saknas");
             }
         }
+
+        function malartag_date() {
+            date = new Date()
+            const year = date.getFullYear();
+            const month = ('0' + (date.getMonth() + 1)).slice(-2);
+            const day = ('0' + date.getDate()).slice(-2);
+            const hours = ('0' + date.getHours()).slice(-2);
+            const minutes = ('0' + date.getMinutes()).slice(-2);
+
+            return `${year}${month}${day}${hours}${minutes}${seconds}`;
+        }
+
+        function redirect_malartag() {
+            params = new URLSearchParams(window.location.search);
+            if (params.get('fromRHP') != null && params.get('toRHP') != null) {
+                window.open(`https://biljett.malartag.se/search/${params.get('fromRHP')}/${params.get('toRHP')}/${malartag_date()}/1/0`, '_blank')
+            } else {
+                alert("Kan inte s\u00F6ka resa, destination eller startpunkt saknas");
+            }
+
+        }
     </script>
 </head>
+
 <body>
     <div class="flex-container" style="height: 100%; flex-direction: column;">
-        <div class="flex-container" style="flex-wrap: wrap; height: auto; background-color: grey;">
+        <!--<div class="flex-container" style="flex-wrap: wrap; height: auto; background-color: grey;">
             <h1>Brickblock1's map to trip search <br><span id="trip"></span></h1>
-            <a title="SÃ¶k resa hos Vy" class="navbar" type="button", onclick="redirect_vy()">Vy<span><img src="https://www.vy.se/images/favicon.png"></span></a>
-            <a title="SÃ¶k resa hos Resrobot" class="navbar" type="button", onclick="redirect_resrobot()">Resrobot<span><img src="https://resrobot.se/favi.ico"></span></a>
-        </div>
+            <a title="Sök resa hos Vy" class="navbar" type="button" , onclick="redirect_vy()">Vy<span><img
+                        src="https://www.vy.se/images/favicon.png"></span></a>
+            <a title="Sök resa hos Resrobot" class="navbar" type="button" ,
+                onclick="redirect_resrobot()">Resrobot<span><img src="https://resrobot.se/favi.ico"></span></a>
+        </div>-->
         <div id="map"></div>
+        <div class="flex-container" style="flex-direction: column;">
+            <h5>Map to trip search</h5>
+            <div  style="height: 8vh; margin: 1vh;">from<input type="text" name="" value=""></div>
+            <div  style="height: 8vh; margin: 1vh;">to<input type="text" name="" value=""></div>
+        </div>
     </div>
 </body>
 <script>
-	var map = L.map('map', {
-		center: [59.606, 17.7786],
-		zoom: 10,
-		worldCopyJump: true}); 
-	L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {maxZoom: 19, attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'}).addTo(map); 
-	var greendot = L.icon({iconUrl: 'green_dot.png', iconSize: [16, 16],}); 
-	var reddot = L.icon({iconUrl: 'red_dot.png', iconSize: [16, 16],});
-	var layerControl = L.control.layers({},{},{sortLayers: true},).addTo(map);
-	set_trip();
+    var map = L.map('map', {
+        center: [62.0985346, 17.3855922],
+        zoom: 5,
+        worldCopyJump: true
+    });
+    L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 19, attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>' }).addTo(map);
+
+    var layer_0 = L.markerClusterGroup({ disableClusteringAtZoom: 15 })
+    var layer_1 = L.markerClusterGroup({ disableClusteringAtZoom: 12 })
+    var layer_2 = L.markerClusterGroup({ disableClusteringAtZoom: 0 })
+    set_trip();
+
+    async function create_stops() {
+        var result = await fetch(`stops.json`);
+        const stops_data = await result.json();
+        for (stopplace of stops_data) {
+            if (stopplace.inuse == true) {
+                if (stopplace.sellable == "true") {
+                    outer_colour = "green"
+                } else {
+                    outer_colour = "red"
+                }
+                console.log(stopplace.transportmode)
+                if (stopplace.transportmode.includes("rail")) {
+                    inner_colour = "purple"
+                } else if (stopplace.transportmode.includes("metro")) {
+                    inner_colour = "red"
+                } else if (stopplace.transportmode.includes("tram")) {
+                    inner_colour = "green"
+                } else if (stopplace.transportmode.includes("water")) {
+                    inner_colour = "blue"
+                } else {
+                    inner_colour = "yellow"
+                }
+                var hej = L.circle([parseFloat(stopplace.lat), parseFloat(stopplace.long)], { radius: 15, weight: 5, color: inner_colour, fillColor: outer_colour, fillOpacity: 0.8 })
+                if (stopplace.transportmode.includes("rail") == true) {
+                    hej.addTo(layer_2)
+                } else if ((stopplace.weight == "recommendedInterchange" | "preferredInterchange") | (stopplace.transportmode.includes("water")) | (stopplace.transportmode.includes("tram")) | (stopplace.transportmode.includes("metro"))) {
+                    hej.addTo(layer_1)
+                } else {
+                    hej.addTo(layer_0)
+                }
+                hej.bindTooltip(`${stopplace.name}`)
+            }
+        }
+    }
+
+    create_stops()
+
+    layer_0.addTo(map)
+    layer_1.addTo(map)
+    layer_2.addTo(map)
 </script>
-<script src="sweden.js"></script>
+
 </html>

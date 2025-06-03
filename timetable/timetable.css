@@ -1,0 +1,12 @@
+table, tr, td, th {
+    border-color: black;
+    border-style: solid;
+    border-collapse: collapse;
+    border-width: 1px;
+    padding: 3px;
+    text-align: center;
+}
+
+th {
+    background-color: grey;
+}
